@@ -233,6 +233,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     protected const STATE_ACCESS_MIN_ADMINS = 1;
     protected const STATE_SKIP = 3;
 
+    /**
+     * State function flag: a (custom) state carrying this function counts as
+     * "accepted" — e.g. it enables the follow-up (createBasedOn) data transfer.
+     * Matches the value of the "accepted" option in the State.functions TCA select.
+     */
+    protected const STATE_FUNCTION_ACCEPTED = 1;
+
     protected const UPLOAD_MAX_DEFAULT = 10;
     protected const UPLOAD_MAXSIZE_DEFAULT = 1048576;  // 1MB
 

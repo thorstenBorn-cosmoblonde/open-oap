@@ -306,6 +306,34 @@
 				<source>Accept functions, e.g. for data transfer</source>
 				<target>Akzeptiert-Funktionen, z.B. bei der Datenübernahme</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.data_transfer" resname="tx_openoap_domain_model_call.tab.data_transfer">
+				<source>Data transfer</source>
+				<target>Datenübernahme</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.successor_call" resname="tx_openoap_domain_model_call.successor_call">
+				<source><![CDATA[Successor call for data overtake]]></source>
+				<target><![CDATA[Nachfolge-Call zur Datenübernahme]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_successor_call" resname="tx_openoap_domain_model_call.no_successor_call">
+				<source>No successor call (yet)</source>
+				<target>kein Nachfolge-Call (zur Zeit)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.predecessor_call" resname="tx_openoap_domain_model_call.predecessor_call">
+				<source><![CDATA[Predecessor call - if this is selected no new empty proposal is possible]]></source>
+				<target><![CDATA[Vorgänger-Call - wenn dieser ausgewählt ist, kann kein leerer, neuer Antrag erstellt werden]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_predecessor_call" resname="tx_openoap_domain_model_call.no_predecessor_call">
+				<source>No predecessor call (yet)</source>
+				<target>kein Vorgänger-Call (zur Zeit)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.data_transfer_group" resname="tx_openoap_domain_model_formgroup.data_transfer_group">
+				<source>Data transfer from group(s)</source>
+				<target>Datenübernahme aus Gruppe(n)</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.data_transfer_item" resname="tx_openoap_domain_model_formitem.data_transfer_item">
+				<source>Data transfer from item</source>
+				<target>Datenübernahme aus Feld</target>
+			</trans-unit>
 
 		</body>
 	</file>

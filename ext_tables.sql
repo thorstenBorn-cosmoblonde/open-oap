@@ -23,6 +23,8 @@ CREATE TABLE tx_openoap_domain_model_call (
 	assessment_items int(11) unsigned NOT NULL DEFAULT '0',
 	assessment_threshold int(11) unsigned NOT NULL DEFAULT '0',
 	available_states int(11) unsigned NOT NULL DEFAULT '0',
+	successor_call int(11) unsigned DEFAULT '0',
+	predecessor_call int(11) unsigned DEFAULT '0',
 );
 
 CREATE TABLE tx_openoap_domain_model_formpage (
@@ -48,7 +50,8 @@ CREATE TABLE tx_openoap_domain_model_formgroup (
 	group_title int(11) unsigned NOT NULL DEFAULT '0',
 	modificators int(11) unsigned NOT NULL DEFAULT '0',
 	type int(11) DEFAULT '0' NOT NULL,
-	item_groups int(11) unsigned NOT NULL DEFAULT '0'
+	item_groups int(11) unsigned NOT NULL DEFAULT '0',
+	data_transfer_group int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_formitem (
@@ -71,7 +74,8 @@ CREATE TABLE tx_openoap_domain_model_formitem (
 	validators int(11) unsigned NOT NULL DEFAULT '0',
 	modificators int(11) unsigned NOT NULL DEFAULT '0',
 	assessment_item smallint(1) unsigned NOT NULL DEFAULT '0',
-	assessment_on_item int(11) unsigned NOT NULL DEFAULT '0'
+	assessment_on_item int(11) unsigned NOT NULL DEFAULT '0',
+	data_transfer_item int(11) unsigned NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_openoap_domain_model_itemoption (

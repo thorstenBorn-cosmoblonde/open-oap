@@ -31,6 +31,8 @@ return [
                 proposal_pid, form_pages, items, blocked_languages,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.documents,
                     logo, --palette--;;wordDocPalette,
+                --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.data_transfer,
+                    successor_call, predecessor_call,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.states,
                     available_states,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,
@@ -47,6 +49,42 @@ return [
         ],
     ],
     'columns' => [
+        'successor_call' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.successor_call',
+            'config' => [
+                'type' => 'select',
+                'readOnly' => false,
+                'renderType' => 'selectSingle',
+                'default' => 0,
+                'items' => [
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.no_successor_call',
+                        'value' => 0,
+                    ],
+                ],
+                'foreign_table' => 'tx_openoap_domain_model_call',
+            ],
+        ],
+        'predecessor_call' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.predecessor_call',
+            'config' => [
+                'type' => 'select',
+                'readOnly' => false,
+                'renderType' => 'selectSingle',
+                'default' => 0,
+                'items' => [
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.no_predecessor_call',
+                        'value' => 0,
+                    ],
+                ],
+                'foreign_table' => 'tx_openoap_domain_model_call',
+            ],
+        ],
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',

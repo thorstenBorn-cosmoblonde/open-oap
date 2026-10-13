@@ -563,6 +563,27 @@
 			<trans-unit id="tx_openoap_domain_model_state.function.accepted" resname="tx_openoap_domain_model_state.function.accepted">
 				<source>Accept functions, e.g. for data transfer</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.data_transfer" resname="tx_openoap_domain_model_call.tab.data_transfer">
+				<source>Data transfer</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.successor_call" resname="tx_openoap_domain_model_call.successor_call">
+				<source>Successor call for data overtake</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_successor_call" resname="tx_openoap_domain_model_call.no_successor_call">
+				<source>No successor call (yet)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.predecessor_call" resname="tx_openoap_domain_model_call.predecessor_call">
+				<source><![CDATA[Predecessor call - if this is selected no new empty proposal is possible]]></source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.no_predecessor_call" resname="tx_openoap_domain_model_call.no_predecessor_call">
+				<source>No predecessor call (yet)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formgroup.data_transfer_group" resname="tx_openoap_domain_model_formgroup.data_transfer_group">
+				<source>Data transfer from group(s)</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_formitem.data_transfer_item" resname="tx_openoap_domain_model_formitem.data_transfer_item">
+				<source>Data transfer from item</source>
+			</trans-unit>
 
 		</body>
 	</file>
