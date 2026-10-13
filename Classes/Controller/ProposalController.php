@@ -641,9 +641,26 @@ class ProposalController extends OapFrontendController
                 $proposal->addLog($logItem);
             }
 
-            $raised   = array_filter($reconcileChanges, fn($c) => $c['newCurrent'] > $c['oldCurrent']);
-            $lowered  = array_filter($reconcileChanges, fn($c) => $c['newCurrent'] < $c['oldCurrent']);
-            $l1Fixed  = array_filter($reconcileChanges, fn($c) => $c['newCurrent'] === $c['oldCurrent'] && !empty($c['l1Adjusted']));
+            // Every correction is logged, but only the ones that can mean lost input
+            // are reported to the applicant: a correction of an optional group
+            // (repeatableMin 0) is marked 'silent', because an instance without any
+            // answers is a legitimate state there and nothing got lost.
+            // The direction decides the wording - repetitions inside a meta group can
+            // be corrected upwards too, which used to be announced as a removal.
+            $raised  = (bool)array_filter($reconcileChanges, fn($c) => $c['newCurrent'] > $c['oldCurrent'] && empty($c['silent']));
+            $lowered = (bool)array_filter($reconcileChanges, fn($c) => $c['newCurrent'] < $c['oldCurrent'] && empty($c['silent']));
+            foreach ($reconcileChanges as $change) {
+                foreach ($change['l1Adjusted'] ?? [] as $l1) {
+                    if (!empty($l1['silent'])) {
+                        continue;
+                    }
+                    if ($l1['new'] > $l1['old']) {
+                        $raised = true;
+                    } elseif ($l1['new'] < $l1['old']) {
+                        $lowered = true;
+                    }
+                }
+            }
 
             if ($raised) {
                 $flashMessage = $this->getTranslationString(
@@ -652,12 +669,6 @@ class ProposalController extends OapFrontendController
                 $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
             }
             if ($lowered) {
-                $flashMessage = $this->getTranslationString(
-                    self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_GROUP_COUNTER_LOWERED
-                );
-                $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
-            }
-            if ($l1Fixed) {
                 $flashMessage = $this->getTranslationString(
                     self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_GROUP_COUNTER_LOWERED
                 );

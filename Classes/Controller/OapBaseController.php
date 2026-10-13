@@ -1950,8 +1950,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * the MetaInformation is rebuilt to match. Changes to answer objects are
      * persisted when the calling action calls persistAll().
      *
+     * Groups without items are left alone: they can never have answer records, so
+     * reconciling them would lower their counter on every save.
+     *
      * @param array $changes  Populated by reference with one entry per corrected group:
-     *                        ['groupUid', 'oldCurrent', 'newCurrent', 'reindexed' (bool)]
+     *                        ['groupUid', 'oldCurrent', 'newCurrent', 'reindexed' (bool),
+     *                         'l1Adjusted' (meta groups only), 'silent' (bool - correction
+     *                         of an optional group, log it but do not warn the applicant)]
      */
     protected function reconcileGroupsCounter(array $groupsCounter, Proposal $proposal, array &$changes = []): array
     {
@@ -2018,14 +2023,20 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         // records exist for it. Such instances must NOT be treated as stale/missing.
         // Build a min-repetition lookup from the form definition (the authoritative
         // source for optionality) to tell "empty but optional" apart from "stale".
+        // The item lookup answers a second question: a group without any items can
+        // never have answer records, so "no answers" is its normal state and must
+        // not be read as a lost instance.
         $groupMinByUid = [];
+        $groupHasItemsByUid = [];
         $call = $proposal->getCall();
         if ($call !== null) {
             foreach ($call->getFormPages() as $formPage) {
                 foreach ($formPage->getItemGroups() as $formGroupL0) {
                     $groupMinByUid[$formGroupL0->getUid()] = $formGroupL0->getRepeatableMin();
+                    $groupHasItemsByUid[$formGroupL0->getUid()] = count($formGroupL0->getItems()) > 0;
                     foreach ($formGroupL0->getItemGroups() as $formGroupL1) {
                         $groupMinByUid[$formGroupL1->getUid()] = $formGroupL1->getRepeatableMin();
+                        $groupHasItemsByUid[$formGroupL1->getUid()] = count($formGroupL1->getItems()) > 0;
                     }
                 }
             }
@@ -2054,9 +2065,11 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 if ($instanceHasAnswers) {
                     continue;
                 }
+                // A nested group only speaks against "legitimately empty" if it is
+                // mandatory AND able to hold answers at all.
                 $allOptional = true;
                 foreach (array_keys($nestedGroups) as $nestedGroupUid) {
-                    if (($groupMinByUid[$nestedGroupUid] ?? 0) > 0) {
+                    if (($groupMinByUid[$nestedGroupUid] ?? 0) > 0 && ($groupHasItemsByUid[$nestedGroupUid] ?? true)) {
                         $allOptional = false;
                         break;
                     }
@@ -2129,6 +2142,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $reindexedGroups = array_keys($reindexC1) + array_keys($reindexC0);
         foreach ($groupsCounter as $groupUid => &$groupData) {
             if (empty($groupData['meta'])) {
+                // A group without items can never have answer records - reconciling
+                // it against answers would lower its counter on every save and claim
+                // a loss that never happened. Leave it untouched.
+                if (!($groupHasItemsByUid[$groupUid] ?? true)) {
+                    continue;
+                }
+
                 // Unnested repeatable group: counter0 is always 0.
                 $oldCurrent  = $groupData['current'];
                 $actualCount = isset($counter1Sets[$groupUid][0])
@@ -2142,6 +2162,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         'oldCurrent' => $oldCurrent,
                         'newCurrent' => $actualCount,
                         'reindexed'  => isset($reindexC1[$groupUid]),
+                        'silent'     => ($groupMinByUid[$groupUid] ?? 0) === 0,
                     ];
                 }
             } else {
@@ -2171,6 +2192,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $instanceHasAnswers = false;
                     $reconciledNestedGroups = [];
                     foreach ($nestedGroups as $nestedGroupUid => $nestedGroupData) {
+                        // Same reasoning as above: an itemless nested group keeps its
+                        // counter, it can never be backed by answer records.
+                        if (!($groupHasItemsByUid[$nestedGroupUid] ?? true)) {
+                            $reconciledNestedGroups[$nestedGroupUid] = $nestedGroupData;
+                            continue;
+                        }
+
                         $actualL1Count = isset($counter1Sets[$nestedGroupUid][$l0Index])
                             ? count($counter1Sets[$nestedGroupUid][$l0Index])
                             : 0;
@@ -2181,6 +2209,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                 'l0Index'    => $l0Index,
                                 'old'        => $oldL1Count,
                                 'new'        => $actualL1Count,
+                                'silent'     => ($groupMinByUid[$nestedGroupUid] ?? 0) === 0,
                             ];
                         }
                         $nestedGroupData['current'] = $actualL1Count;
@@ -2208,6 +2237,7 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         'newCurrent' => $newCurrent,
                         'reindexed'  => $wasReindexed,
                         'l1Adjusted' => $l1Changes,
+                        'silent'     => ($groupMinByUid[$groupUid] ?? 0) === 0,
                     ];
                 }
             }
