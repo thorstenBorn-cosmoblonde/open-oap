@@ -94,6 +94,13 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public static string $defaultUploadFolder = '1:/user_upload/';
 
     /**
+     * Number of applicants grouped into one shard folder below the upload base.
+     * Proposal files are stored under <base>/<applicantUid ÷ bucketSize>/<applicantUid>/<proposalUid>/
+     * to keep the number of entries per directory bounded for large user counts.
+     */
+    public const APPLICANT_FOLDER_BUCKET_SIZE = 1000;
+
+    /**
      * Const
      * see TCA: tx_openoap_domain_model_proposal.php
      */
@@ -1089,11 +1096,31 @@ class OapBaseController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         [$storageId, $storagePath] = explode(':', $uploadFolderIdentifier, 2);
         $storage = $resourceFactory->getStorageObject($storageId);
         $folderNames = GeneralUtility::trimExplode('/', $storagePath, true);
-        $folderNames[] = (string)$applicantUid;
-        $folderNames[] = (string)$proposalUid;
+        foreach (self::proposalFolderSegments($applicantUid, $proposalUid) as $segment) {
+            $folderNames[] = $segment;
+        }
         $uploadFolder = self::provideTargetFolder($storage->getRootLevelFolder(), implode('/', $folderNames));
         self::provideFolderInitialization($uploadFolder);
         return $uploadFolder;
+    }
+
+    /**
+     * Path segments (below the upload base folder) for a proposal's files, sharded by
+     * applicant uid to bound the number of entries per directory:
+     *   <applicantUid ÷ APPLICANT_FOLDER_BUCKET_SIZE> / <applicantUid> / <proposalUid>
+     *
+     * Single source of truth for both the runtime folder creation and the
+     * ProposalFolderShardingWizard / ArchiveProposalsTask.
+     *
+     * @return string[]
+     */
+    public static function proposalFolderSegments(int $applicantUid, int $proposalUid): array
+    {
+        return [
+            (string)intdiv($applicantUid, self::APPLICANT_FOLDER_BUCKET_SIZE),
+            (string)$applicantUid,
+            (string)$proposalUid,
+        ];
     }
 
     /**

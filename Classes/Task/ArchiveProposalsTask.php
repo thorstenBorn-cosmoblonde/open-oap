@@ -370,7 +370,11 @@ class ArchiveProposalsTask extends AbstractTask
         $uploadedFileUids = $this->getUploadedFileUids($proposals);
 
         foreach ($proposals as $proposalUid => $proposal) {
-            $folderPattern = sprintf('/%s/%s/', $proposal['applicant'], $proposalUid);
+            // Same sharded path as the runtime folder creation (single source of truth).
+            $folderPattern = '/' . implode(
+                '/',
+                \OpenOAP\OpenOap\Controller\OapBaseController::proposalFolderSegments((int)$proposal['applicant'], (int)$proposalUid)
+            ) . '/';
 
             $qb = $this->getQueryBuilder(self::TABLE_SYS_FILE);
             // Uploads are addressed by UID, the Word exports by their extension. The folder
