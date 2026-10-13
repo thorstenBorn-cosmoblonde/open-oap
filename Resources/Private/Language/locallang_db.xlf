@@ -563,6 +563,33 @@
 			<trans-unit id="tx_openoap_domain_model_state.function.accepted" resname="tx_openoap_domain_model_state.function.accepted">
 				<source>Accept functions, e.g. for data transfer</source>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.archive" resname="tx_openoap_domain_model_call.tab.archive">
+				<source>Archiving</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived" resname="tx_openoap_domain_model_call.archived">
+				<source><![CDATA[Archive submissions for this call]]></source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived.checked" resname="tx_openoap_domain_model_call.archived.checked">
+				<source>Archiving requested</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived.unchecked" resname="tx_openoap_domain_model_call.archived.unchecked">
+				<source>Not archived</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_at" resname="tx_openoap_domain_model_call.archived_at">
+				<source>Date of archiving</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state" resname="tx_openoap_domain_model_call.archived_state">
+				<source>Archiving status</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state.not_started" resname="tx_openoap_domain_model_call.archived_state.not_started">
+				<source>Archiving not yet started</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state.started" resname="tx_openoap_domain_model_call.archived_state.started">
+				<source>Archiving started</source>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state.finished" resname="tx_openoap_domain_model_call.archived_state.finished">
+				<source>Archiving finished</source>
+			</trans-unit>
 
 		</body>
 	</file>

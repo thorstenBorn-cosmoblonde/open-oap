@@ -202,6 +202,23 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected ?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $availableStates = null;
 
     /**
+     * @var bool
+     */
+    protected bool $archived = false;
+
+    /**
+     * archived time of call
+     *
+     * @var \DateTime|null
+     */
+    protected ?\DateTime $archivedAt = null;
+
+    /**
+     * @var int
+     */
+    protected int $archivedState = 0;
+
+    /**
      * __construct
      */
     public function __construct()
@@ -714,6 +731,36 @@ class Call extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setAvailableStates(?\TYPO3\CMS\Extbase\Persistence\ObjectStorage $availableStates): void
     {
         $this->availableStates = $availableStates;
+    }
+
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): void
+    {
+        $this->archived = $archived;
+    }
+
+    public function getArchivedAt(): ?\DateTime
+    {
+        return $this->archivedAt;
+    }
+
+    public function setArchivedAt(?\DateTime $archivedAt): void
+    {
+        $this->archivedAt = $archivedAt;
+    }
+
+    public function getArchivedState(): int
+    {
+        return $this->archivedState;
+    }
+
+    public function setArchivedState(int $archivedState): void
+    {
+        $this->archivedState = $archivedState;
     }
 
     public function getAssessmentItems(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage

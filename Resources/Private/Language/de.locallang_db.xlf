@@ -306,6 +306,42 @@
 				<source>Accept functions, e.g. for data transfer</source>
 				<target>Akzeptiert-Funktionen, z.B. bei der Datenübernahme</target>
 			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.tab.archive" resname="tx_openoap_domain_model_call.tab.archive">
+				<source>Archiving</source>
+				<target>Archivierung</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived" resname="tx_openoap_domain_model_call.archived">
+				<source><![CDATA[Archive submissions for this call]]></source>
+				<target><![CDATA[Einreichungen zu diesem Call archivieren]]></target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived.checked" resname="tx_openoap_domain_model_call.archived.checked">
+				<source>Archiving requested</source>
+				<target>Archivierung angefordert</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived.unchecked" resname="tx_openoap_domain_model_call.archived.unchecked">
+				<source>Not archived</source>
+				<target>Nicht archiviert</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_at" resname="tx_openoap_domain_model_call.archived_at">
+				<source>Date of archiving</source>
+				<target>Datum der Archivierung</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state" resname="tx_openoap_domain_model_call.archived_state">
+				<source>Archiving status</source>
+				<target>Archivierungsstatus</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state.not_started" resname="tx_openoap_domain_model_call.archived_state.not_started">
+				<source>Archiving not yet started</source>
+				<target>Archivierung noch nicht gestartet</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state.started" resname="tx_openoap_domain_model_call.archived_state.started">
+				<source>Archiving started</source>
+				<target>Archivierung gestartet</target>
+			</trans-unit>
+			<trans-unit id="tx_openoap_domain_model_call.archived_state.finished" resname="tx_openoap_domain_model_call.archived_state.finished">
+				<source>Archiving finished</source>
+				<target>Archivierung abgeschlossen</target>
+			</trans-unit>
 
 		</body>
 	</file>

@@ -33,6 +33,8 @@ return [
                     logo, --palette--;;wordDocPalette,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.states,
                     available_states,
+                --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.tab.archive,
+                    archived, archived_at, archived_state,
                 --div--;LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.survey_tab,
                     anonym, survey_codes,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
@@ -47,6 +49,66 @@ return [
         ],
     ],
     'columns' => [
+        'archived' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'displayCond' => 'USER:OpenOAP\\OpenOap\\UserFunctions\\FormEngine\\CallTcaConditions->notArchivedButPossibleToArchive',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived',
+            'config' => [
+                'type' => 'check',
+                'renderType' => 'checkboxToggle',
+                'items' => [
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived.checked',
+                        'labelChecked' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived.checked',
+                        'labelUnchecked' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived.unchecked',
+                    ],
+                ],
+            ],
+        ],
+        'archived_at' => [
+            'exclude' => false,
+            'l10n_mode' => 'exclude',
+            'displayCond' => 'USER:OpenOAP\\OpenOap\\UserFunctions\\FormEngine\\CallTcaConditions->archivingIsComplete',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived_at',
+            'config' => [
+                'type' => 'datetime',
+                'dbType' => 'datetime',
+                'size' => 12,
+                'format' => 'datetime',
+                'default' => null,
+                'readOnly' => true,
+            ],
+        ],
+        'archived_state' => [
+            'exclude' => true,
+            'l10n_mode' => 'exclude',
+            'displayCond' => 'USER:OpenOAP\\OpenOap\\UserFunctions\\FormEngine\\CallTcaConditions->archivingIsComplete',
+            'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived_state',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived_state.not_started',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived_state.started',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:open_oap/Resources/Private/Language/locallang_db.xlf:tx_openoap_domain_model_call.archived_state.finished',
+                        'value' => 2,
+                    ],
+                ],
+                'default' => 0,
+                'size' => 1,
+                'minitems' => 1,
+                'maxitems' => 1,
+                'readOnly' => true,
+            ],
+        ],
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
