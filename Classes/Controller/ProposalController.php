@@ -19,11 +19,13 @@ use OpenOAP\OpenOap\Domain\Model\Proposal;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Http\UploadedFile;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Resource\Enum\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Validation\ResultException;
 use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -1543,7 +1545,23 @@ class ProposalController extends OapFrontendController
                             continue;
                         }
 
-                        $uploadedFile = $uploadFolder->addUploadedFile($file, DuplicationBehavior::RENAME);
+                        try {
+                            $uploadedFile = $uploadFolder->addUploadedFile($file, DuplicationBehavior::RENAME);
+                        } catch (ResultException $exception) {
+                            // The file abstraction layer rejects files whose content does not match
+                            // their file extension, and - when the feature toggle
+                            // security.system.enforceAllowedFileExtensions is on - extensions outside
+                            // textfile_ext/mediafile_ext/miscfile_ext. Without this guard the
+                            // exception aborts the whole update action: the applicant gets an error
+                            // page and loses every change of that submit, not just the upload.
+                            $this->logRejectedUpload($file, $exception);
+                            $flashMessage = $this->getTranslationString(
+                                self::XLF_BASE_IDENTIFIER_FLASH . self::FLASH_MSG_UPLOAD_FILE_REJECTED,
+                                [$file->getClientFilename()]
+                            );
+                            $this->addFlashMessage($flashMessage, '', \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+                            continue;
+                        }
                         $valueString = $uploadAnswer->getValue();
                         $fileIds = GeneralUtility::trimExplode(',', $valueString, true);
                         $fileIds[] = $uploadedFile->getUid();
@@ -1840,5 +1858,29 @@ class ProposalController extends OapFrontendController
         }
 
         return $file->getSize() <= $maxBytes;
+    }
+
+    /**
+     * Write the details of a file rejected by the file abstraction layer to the log.
+     *
+     * The exception message itself only says "Resource consistency check failed"; the
+     * detected mime-type, the file extension and the expected mime-types are carried in
+     * the ResultMessage objects and would be lost otherwise.
+     */
+    protected function logRejectedUpload(UploadedFile $file, ResultException $exception): void
+    {
+        $details = [];
+        foreach ($exception->messages as $message) {
+            $details[] = $message->message;
+        }
+
+        GeneralUtility::makeInstance(LogManager::class)->getLogger(static::class)->warning(
+            'Upload rejected by the file abstraction layer: ' . implode(' ', $details),
+            [
+                'fileName' => $file->getClientFilename(),
+                'clientMimeType' => $file->getClientMediaType(),
+                'fileSize' => $file->getSize(),
+            ]
+        );
     }
 }

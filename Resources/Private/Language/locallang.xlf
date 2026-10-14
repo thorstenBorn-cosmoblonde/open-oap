@@ -821,6 +821,10 @@
                         resname='tx_openoap.flash.upload_file_size_exceeded'>
                 <source><![CDATA[The file "%1$s" could not be uploaded. The file size exceeds the allowed limit.]]></source>
             </trans-unit>
+            <trans-unit id='tx_openoap.flash.upload_file_rejected'
+                        resname='tx_openoap.flash.upload_file_rejected'>
+                <source><![CDATA[The file "%1$s" could not be uploaded. The file type is not allowed or the content of the file does not match its file extension. Please save the file again in the matching format and try again.]]></source>
+            </trans-unit>
             <trans-unit id='tx_openoap.js_msg.upload_error_file_type'
                         resname='tx_openoap.js_msg.upload_error_file_type'>
                 <source><![CDATA[The file type is not allowed.]]></source>
