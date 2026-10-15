@@ -816,6 +816,41 @@ Then, using the function above "Paste clipboard content", the copied call is ins
 
 <img src="../Images/Manual/Editing/call-paste.png" style="max-width:172px;height:auto" />
 
+### Archiving a call
+
+When a call is over and its submissions no longer have to be kept, the call can be marked for
+archiving. The **Archiving** tab of the call record holds three fields:
+
+1. **Archive submissions for this call**: the switch an editor sets. It requests the archiving,
+   it does not perform it.
+2. **Archiving status**: filled by the system - archiving not yet started, started, or finished.
+3. **Date of archiving**: filled by the system when the archiving ran.
+
+The archiving itself is done by a scheduler task, so it starts after the switch has been set,
+not at the moment of saving.
+
+**Note**: Archiving removes data and cannot be undone. What happens to a call's submissions:
+
+- the answers, the comments and the drafts are flagged as deleted and disappear from the
+  proposals module
+- the uploaded files and the generated Word exports are deleted from the file storage for good
+- the generated PDF of a submitted proposal is kept, so the submission itself stays readable
+
+Set the switch only once it is settled that the uploads are no longer needed. If in doubt, export
+what is needed before marking the call.
+
+#### Administration of the archiving task
+
+The task is set up in the TYPO3 scheduler as "Archiving of submissions". It works through the
+calls marked for archiving and carries three settings:
+
+- **Run only from hour** and **Run only until hour** (0-24): the time window the task is allowed
+  to work in. Archiving a large call means deleting many files, which is better done outside the
+  hours applicants work in.
+- **Proposals per call per run** (chunk size): how many proposals of one call are processed in a
+  single run. A call with thousands of submissions is archived over several runs rather than in
+  one long one; the task picks up a call it has started before the ones it has not begun.
+
 ### Special function "anonymous survey"
 
 Only optionally available in OAP!
