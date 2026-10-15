@@ -223,3 +223,6 @@ the applicant to review the entries of that group.
 
 Both are notices, not errors: the application itself is saved. They exist so that a form that
 changed underneath an applicant does not silently lose entries.
+
+A group that holds no items of its own, and a repeatable group the applicant may leave out
+entirely, are not reported: there is nothing for the applicant to review in them.
