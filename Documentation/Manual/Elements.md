@@ -179,6 +179,12 @@ message naming the file:
 
 The rest of the form is saved either way; only the rejected file is missing.
 
+A third case is reported the same way: a file whose content does not match its file extension -
+a spreadsheet saved in a different format than its name suggests, for instance. The message asks
+for the file to be saved again in the format its extension names. Where exactly the file failed
+is written to the log of the installation, which is the place to look when an applicant reports
+a file that will not go through.
+
 ### Table (Group)
 
 Special group element for tabular presentation. 1 to a maximum of 4 columns are possible.
